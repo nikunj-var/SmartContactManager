@@ -1,0 +1,47 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.navbar {
+  height: 60px;
+  background-color: #f8f9fa;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 10px;
+}
+
+/* App.css */
+.app.light {
+  height: 100%;
+  background-color: white;
+  color: black;
+}
+
+.app.dark {
+  height: 100%;
+  background-color: black;
+  color: white;
+}
+
+.nav.light {
+  background-color: #f0f0f0;
+  color: black;
+}
+
+.nav.dark {
+  background-color: #333;
+  color: white;
+}
+
+/* Add more styles as needed */
