@@ -19,12 +19,12 @@ const Register = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    console.log("called");
     await axios.post("http://localhost:8080/api/do-register", user, {
       headers: {
         "Content-Type": "application/json",
       },
     });
+    setUser({ name: "", email: "", password: "", phoneNumber: "", about: "" });
   };
   return (
     <div>

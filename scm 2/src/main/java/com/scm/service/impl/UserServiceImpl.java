@@ -1,7 +1,7 @@
 package com.scm.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +24,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
+        // generate userid dynamically
+        String userId = UUID.randomUUID().toString();
+        // encode userid
+        user.setUserId(userId);
         return userRepositories.save(user);
-        
     }
 
     @Override
@@ -67,14 +70,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean isUserExistByEmail(String email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExistByEmail'");
+        User user = userRepositories.findByEmail(email).orElse(null);
+        return user!=null ? true:null;
     }
 
     @Override
     public List<User> getAllUsers() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllUsers'");
+      return null;
     }
 
 }
