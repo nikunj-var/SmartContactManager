@@ -61,8 +61,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean isUserExist(String emailId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isUserExist'");
+       User user = userRepositories.findById(emailId).orElse(null);
+       return user!=null ? true:false;
     }
 
     @Override
