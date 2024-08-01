@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Form from "../../components/form";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -16,19 +15,26 @@ const Register = () => {
   const onInputChange = (e) => {
     setUser({ ...user, [e?.target?.name]: e?.target?.value });
   };
-  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    await axios.post("http://localhost:8080/api/do-register", user, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    await axios
+      .post("http://localhost:8080/api/do-register", user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        console.log("toast1");
+        toast.success("user added");
+        console.log("toast2");
+      });
+
     setUser({ name: "", email: "", password: "", phoneNumber: "", about: "" });
   };
   return (
     <div>
-      <div class="block max-w-xl mx-auto my-10 p-10 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-gray-700 border-t-4 border-gray-600">
+      <div class="block max-w-xl mx-auto my-10 p-10 bg-white border border-gray-200 rounded-lg shadow  dark:bg-gray-800 dark:border-white border-t-4 border-gray-600">
         <h1 className="text-center text-3xl font-bold p-8">SignUp Here!</h1>
         <form class="max-w-md mx-auto" onSubmit={handleSubmit}>
           <div class="relative z-0 w-full mb-5 group">

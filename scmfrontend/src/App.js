@@ -7,6 +7,8 @@ import Register from "./containers/register";
 import NavbarLayout from "./components/navLayout";
 import { createContext, useState } from "react";
 import Services from "./containers/services";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export const ThemeContext = createContext();
 
@@ -17,17 +19,18 @@ const AppLayout = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {" "}
-      <div className={`app ${theme}`}>
-        <div className="navbar">
-          <NavbarLayout />{" "}
+    <>
+      <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <div className={`app ${theme}`}>
+          <div className="navbar">
+            <NavbarLayout />
+          </div>
+          <div className="main-content">
+            <Outlet />
+          </div>
         </div>
-        <div className="main-content">
-          <Outlet />
-        </div>
-      </div>
-    </ThemeContext.Provider>
+      </ThemeContext.Provider>
+    </>
   );
 };
 const appRouter = createBrowserRouter([
@@ -54,6 +57,21 @@ const appRouter = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={appRouter} />;
+  return (
+    <div>
+      <RouterProvider router={appRouter}></RouterProvider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+      />
+    </div>
+  );
 };
 export default App;
