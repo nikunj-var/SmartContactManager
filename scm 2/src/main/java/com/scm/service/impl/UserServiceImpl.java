@@ -6,6 +6,7 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.scm.entities.User;
@@ -20,14 +21,21 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepositories userRepositories;
 
+    @Autowired private PasswordEncoder passwordEncoder;
+
     private Logger logger =  LoggerFactory.getLogger(getClass());
 
     @Override
     public User saveUser(User user) {
         // generate userid dynamically
         String userId = UUID.randomUUID().toString();
+     
         // encode userid
         user.setUserId(userId);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+      user.setRoleList(List.of(AppConstants.ROLE_USER));
+        logger.info(user.getProvider().toString());
         return userRepositories.save(user);
     }
 

@@ -58,7 +58,7 @@ const appRouter = createBrowserRouter([
 
 const App = () => {
   return (
-    <div>
+    <>
       <RouterProvider router={appRouter}></RouterProvider>
       <ToastContainer
         position="bottom-right"
@@ -71,7 +71,7 @@ const App = () => {
         draggable={false}
         pauseOnHover
       />
-    </div>
+    </>
   );
 };
 export default App;
