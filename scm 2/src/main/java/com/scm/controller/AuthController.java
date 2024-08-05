@@ -1,0 +1,58 @@
+package com.scm.controller;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.scm.repositories.UserRepositories;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin("http://localhost:3001")
+public class AuthController {
+    private final UserRepositories userRepositories;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    @Autowired 
+    public AuthController(UserRepositories userRepositories,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager){
+        this.authenticationManager=authenticationManager;
+        this.passwordEncoder=passwordEncoder;
+        this.userRepositories=userRepositories;
+        System.out.println("constructur colled");
+    }
+    
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String,String> credentials) {
+        String email = credentials.get("username");
+        String password = credentials.get("password");
+        System.out.println("login method called"+email);
+        try{
+           
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+              SecurityContextHolder.getContext().setAuthentication(authentication);
+              return ResponseEntity.ok("Login Successfull");
+        }
+        catch(AuthenticationException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
+        }
+    }
+}

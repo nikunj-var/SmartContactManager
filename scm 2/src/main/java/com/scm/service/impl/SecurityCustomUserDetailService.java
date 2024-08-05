@@ -8,14 +8,23 @@ import org.springframework.stereotype.Service;
 
 import com.scm.repositories.UserRepositories;
 
+import java.util.ArrayList;
+
 @Service
 public class SecurityCustomUserDetailService implements UserDetailsService{
 
     @Autowired private UserRepositories userRepositories;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       return userRepositories.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("User not found with this email"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+       
+        UserDetails user = userRepositories.findByEmail(email).orElseThrow(()->new UsernameNotFoundException("User not found with this email"));
+       
+    return new org.springframework.security.core.userdetails.User(
+        user.getUsername(),
+        user.getPassword(),
+        new ArrayList<>()
+    );
     }
     
 }

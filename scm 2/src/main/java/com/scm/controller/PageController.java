@@ -3,6 +3,8 @@ package com.scm.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,15 +26,21 @@ public class PageController {
 
    @Autowired UserService userService; 
 
+   @Autowired private AuthenticationManager authenticationManager;
+
    @PostMapping("/do-register")
-     public String processRegsister(@Valid @RequestBody UserForm userForm,BindingResult bindingResult){
+     public ResponseEntity<?> processRegsister(@Valid @RequestBody UserForm userForm,BindingResult bindingResult){
       
       if(bindingResult.hasErrors()){
-         return "error";
+         System.out.println("error");
+         return ResponseEntity.badRequest().body("Validation errors");
+
       }
+      System.out.println("register called");
       User user = User.builder().name(userForm.getName()).email(userForm.getEmail()).password(userForm.getPassword()).about(userForm.getAbout()).phoneNumber(userForm.getPhoneNumber()).profilePic("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFVHR62PqqslJrmbNHhwiH3Cmb99-h10mi6g&s").build();
       User savedUser = userService.saveUser(user);
-      return "";
+      return ResponseEntity.ok("User Registered Succesffully");
      }
- 
+
+   
 }

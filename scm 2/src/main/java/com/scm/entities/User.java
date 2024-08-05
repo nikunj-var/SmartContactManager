@@ -4,6 +4,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -47,7 +49,8 @@ public class User implements UserDetails{
     private boolean enabled = true;
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
-    
+
+    @Enumerated(EnumType.STRING)
     private Providers provider = Providers.SELF;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -88,7 +91,7 @@ public class User implements UserDetails{
 
     @Override
     public String getPassword(){
+        System.out.println("password"+this.password);
         return this.password;
     }
-   
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.scm.entities.Providers;
 import com.scm.entities.User;
 import com.scm.repositories.UserRepositories;
 import com.scm.service.UserService;
@@ -27,6 +28,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
+
+
+
         // generate userid dynamically
         String userId = UUID.randomUUID().toString();
      
@@ -34,8 +38,8 @@ public class UserServiceImpl implements UserService{
         user.setUserId(userId);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-      user.setRoleList(List.of(AppConstants.ROLE_USER));
-        logger.info(user.getProvider().toString());
+      // user.setRoleList(List.of(AppConstants.ROLE_USER));
+      //   logger.info(user.getProvider().toString());
         return userRepositories.save(user);
     }
 
@@ -56,9 +60,12 @@ public class UserServiceImpl implements UserService{
         user2.setEnabled(user.isEnabled());
         user2.setEmailVerified(user.isEmailVerified());
         user2.setPhoneVerified(user.isPhoneVerified());
-        user2.setProvider(user.getProvider());
+        user2.setProvider(user.getProvider() );
         user2.setProviderUserId(user.getProviderUserId());
 
+        if(user.getProvider() == null){
+          user2.setProvider(Providers.SELF);
+        }
         User save = userRepositories.save(user2);
 
         return Optional.ofNullable(save);
