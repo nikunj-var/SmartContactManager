@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ThemeContext } from "../../App";
+import { AuthContext, ThemeContext } from "../../App";
 import { MdOutlineLightMode } from "react-icons/md";
+import { logout } from "../../services/AuthService";
+import { toast } from "react-toastify";
 
 const NavbarLayout = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   return (
     <div>
       <nav
@@ -28,20 +31,37 @@ const NavbarLayout = () => {
           <div class="flex gap-2 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <div class="flex gap-2 md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
               {" "}
-              <Link
-                to={"/login"}
-                type="button"
-                className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-              >
-                Login
-              </Link>
-              <Link
-                to={"/register"}
-                type="button"
-                className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 md:order-2 space-x-2"
-              >
-                Register
-              </Link>
+              {!isAuthenticated ? (
+                <Link
+                  to={"/login"}
+                  type="button"
+                  className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                >
+                  Login
+                </Link>
+              ) : (
+                <Link
+                  to={"/login"}
+                  type="button"
+                  className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                  onClick={async () => {
+                    await logout();
+                    toast.success("Logout Successfully");
+                    setIsAuthenticated(false);
+                  }}
+                >
+                  Logout
+                </Link>
+              )}
+              {!isAuthenticated && (
+                <Link
+                  to={"/register"}
+                  type="button"
+                  className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800 md:order-2 space-x-2"
+                >
+                  Register
+                </Link>
+              )}
             </div>
 
             <div>

@@ -44,7 +44,7 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/login","/api/do-register","/login").permitAll().anyRequest().authenticated());
+        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/login","/api/do-register","/login","/api/auth/logout").permitAll().anyRequest().authenticated());
         httpSecurity.cors(cors->cors.configurationSource(request->{
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3001"));

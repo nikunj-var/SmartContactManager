@@ -95,7 +95,7 @@ const Login = () => {
             type="submit"
             class="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-gray-300"
           >
-            Sign Up
+            Login
           </button>
         </div>
       </form>

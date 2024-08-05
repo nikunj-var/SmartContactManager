@@ -13,6 +13,7 @@ import NavbarLayout from "./components/navLayout";
 import { createContext, useContext, useState } from "react";
 import Services from "./containers/services";
 import "react-toastify/dist/ReactToastify.css";
+
 import { ToastContainer } from "react-toastify";
 
 export const ThemeContext = createContext();
@@ -48,29 +49,6 @@ const ProtectedRoute = ({ element }) => {
   console.log("isAuthenticated = ", isAuthenticated);
   return isAuthenticated ? element : <Navigate to="/login" />;
 };
-
-// const appRouter = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <AppLayout />,
-//     children: [
-//       {
-//         path: "/",
-//         element: <HomePage />,
-//       },
-//       {
-//         path: "/about",
-//         element: <About />,
-//       },
-//       {
-//         path: "/services",
-//         element: <Services />,
-//       },
-//       { path: "/login", element: <Login /> },
-//       { path: "/register", element: <Register /> },
-//     ],
-//   },
-// ]);
 
 const appRouter = createBrowserRouter([
   {
