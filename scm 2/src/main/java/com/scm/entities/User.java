@@ -15,9 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.scm.entities.Contact;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -91,7 +89,6 @@ public class User implements UserDetails{
 
     @Override
     public String getPassword(){
-        System.out.println("password"+this.password);
         return this.password;
     }
 }

@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.scm.repositories.UserRepositories;
@@ -39,7 +38,7 @@ public class AuthController {
         this.authenticationManager=authenticationManager;
         this.passwordEncoder=passwordEncoder;
         this.userRepositories=userRepositories;
-        System.out.println("constructur colled");
+       
     }
     
 
@@ -47,12 +46,12 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody Map<String,String> credentials) {
         String email = credentials.get("username");
         String password = credentials.get("password");
-        System.out.println("login method called"+email);
+      
         try{
            
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
               SecurityContextHolder.getContext().setAuthentication(authentication);
-              return ResponseEntity.ok("Login Successfull");
+              return ResponseEntity.ok("Login Successful!");
         }
         catch(AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Credentials");
@@ -66,7 +65,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(null);
         httpServletRequest.getSession().invalidate();
       }
-      return ResponseEntity.ok("Logout Successfull!");
+      return ResponseEntity.ok("You have been Logout Successfully!");
     }
     
 }

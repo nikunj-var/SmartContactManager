@@ -13,6 +13,7 @@ import NavbarLayout from "./components/navLayout";
 import { createContext, useContext, useState } from "react";
 import Services from "./containers/services";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 import { ToastContainer } from "react-toastify";
 
@@ -21,24 +22,32 @@ export const AuthContext = createContext();
 
 const AppLayout = () => {
   const [theme, setTheme] = useState("light");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.get("isAuthenticated") === "true") {
+      console.log("url caled");
+      setIsAuthenticated(true);
+    }
+  }, [setIsAuthenticated]);
+
   return (
     <>
       <ThemeContext.Provider value={{ theme, toggleTheme }}>
-        <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-          <div className={`app ${theme}`}>
-            <div className="navbar">
-              <NavbarLayout />
-            </div>
-            <div className="main-content">
-              <Outlet />
-            </div>
+        <div className={`app ${theme}`}>
+          <div className="navbar">
+            <NavbarLayout />
           </div>
-        </AuthContext.Provider>
+          <div className="main-content">
+            <Outlet />
+          </div>
+        </div>
       </ThemeContext.Provider>
     </>
   );
@@ -46,7 +55,6 @@ const AppLayout = () => {
 
 const ProtectedRoute = ({ element }) => {
   const { isAuthenticated } = useContext(AuthContext);
-  console.log("isAuthenticated = ", isAuthenticated);
   return isAuthenticated ? element : <Navigate to="/login" />;
 };
 
@@ -74,20 +82,26 @@ const appRouter = createBrowserRouter([
 ]);
 
 const App = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialAuthState = urlParams.get("isAuthenticated") === "true";
+  const [isAuthenticated, setIsAuthenticated] = useState(initialAuthState);
   return (
     <>
-      <RouterProvider router={appRouter}></RouterProvider>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable={false}
-        pauseOnHover
-      />
+      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        {" "}
+        <RouterProvider router={appRouter}></RouterProvider>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover
+        />
+      </AuthContext.Provider>
     </>
   );
 };

@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 
+
 import com.scm.service.impl.SecurityCustomUserDetailService;
 
 
@@ -25,35 +26,36 @@ public class SecurityConfig{
 
     @Autowired private SecurityCustomUserDetailService userDetailService;
 
-
+    @Autowired private OAuthAuthenticationSuccessHandler oAuthAuthenticationSuccessHandler;
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        System.out.println();
-        System.out.println("user details servie"+userDetailService);
         daoAuthenticationProvider.setUserDetailsService(userDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        System.out.println();
-        System.out.println();
-        System.out.println("authentication "+daoAuthenticationProvider);
-        System.out.println();
-        System.out.println();
         return daoAuthenticationProvider;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/login","/api/do-register","/login","/api/auth/logout").permitAll().anyRequest().authenticated());
+
+        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/login","/api/do-register","/login**","/api/auth/logout","/oauth2/**").permitAll().anyRequest().authenticated());
+       
+
+        
         httpSecurity.cors(cors->cors.configurationSource(request->{
             CorsConfiguration corsConfiguration = new CorsConfiguration();
-            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3001"));
+            corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:8080"));
             corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             corsConfiguration.setAllowCredentials(true);
             corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
             corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
             return corsConfiguration;
         }));
+
+        // oauth configuration
+        httpSecurity.oauth2Login(oauth2 -> oauth2.loginPage("/login").successHandler(oAuthAuthenticationSuccessHandler));
+    
         return httpSecurity.build();
     }
 
@@ -66,4 +68,5 @@ public class SecurityConfig{
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+   
 }

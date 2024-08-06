@@ -18,6 +18,11 @@ export const login = async (credentials) => {
 export const logout = async () => {
   try {
     const response = await API.post("/auth/logout");
+    if (response?.status === 200) {
+      toast.success(response?.data);
+    } else {
+      toast.error(response?.data);
+    }
     return response;
   } catch (err) {
     toast.error(err?.response);

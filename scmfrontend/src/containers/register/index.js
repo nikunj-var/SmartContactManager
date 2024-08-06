@@ -19,15 +19,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e?.preventDefault();
     try {
-      await axios
+      const response = await axios
         .post("http://localhost:8080/api/do-register", user, {
           headers: {
             "Content-Type": "application/json",
           },
         })
-        .then(() => {
+        .then((res) => {
           console.log("toast1");
-          toast.success("user added");
+          toast.success(res?.data);
           console.log("toast2");
         });
     } catch (err) {
