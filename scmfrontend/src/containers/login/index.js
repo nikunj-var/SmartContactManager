@@ -57,7 +57,7 @@ const Login = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const authSuccess = urlParams.get("isAuthenticated");
+    const authSuccess = urlParams.get("token");
     if (authSuccess === "true") {
       setIsAuthenticated(true);
       setRedirect(true);

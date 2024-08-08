@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.scm.entities.Providers;
 import com.scm.entities.User;
 import com.scm.repositories.UserRepositories;
+import com.scm.service.impl.TokenService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,8 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
     Logger logger = LoggerFactory.getLogger(OAuthAuthenticationSuccessHandler.class); 
 
     @Autowired private UserRepositories userRepositories;
+
+    @Autowired private TokenService tokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -72,8 +75,8 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
                     userRepositories.save(user1);
                     logger.info("user saved ");
                 }
-
-                new DefaultRedirectStrategy().sendRedirect(request, response, "http://localhost:3001/?isAuthenticated=true");
+                String token = tokenService.generateToken(authentication);
+                new DefaultRedirectStrategy().sendRedirect(request, response, "http://localhost:3001/?token="+true);
     }
 
 }
