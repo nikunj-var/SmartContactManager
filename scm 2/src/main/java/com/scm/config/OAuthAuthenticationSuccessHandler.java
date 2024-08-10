@@ -76,7 +76,7 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
                     logger.info("user saved ");
                 }
                 String token = tokenService.generateToken(authentication);
-                new DefaultRedirectStrategy().sendRedirect(request, response, "http://localhost:3001/?token="+true);
+                new DefaultRedirectStrategy().sendRedirect(request, response, "http://localhost:3001/?isauthenticated=true&token="+token);
     }
 
 }

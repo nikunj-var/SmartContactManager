@@ -7,13 +7,13 @@ public class Helper {
     public static String getEmailOfLoggedInUser(org.springframework.security.core.Authentication authentication){
        
         String name="";
-        System.out.println("Authentication ="+authentication);
+      
         if(authentication instanceof OAuth2AuthenticationToken){
             var oAuth2AuthenticationToken=(OAuth2AuthenticationToken)authentication;
-            System.out.println("oauth2authentication = "+oAuth2AuthenticationToken);
+         
             var clientId = oAuth2AuthenticationToken.getAuthorizedClientRegistrationId();
             var oauth2User = (OAuth2User)authentication.getPrincipal();
-            System.out.println(oauth2User);
+        
             if(clientId.equalsIgnoreCase("google")){
                name = (String)oauth2User.getAttribute("email").toString();
             }

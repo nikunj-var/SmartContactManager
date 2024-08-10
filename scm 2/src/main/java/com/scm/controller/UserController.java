@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,10 @@ import com.scm.helpers.Helper;
 import com.scm.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 
 @RestController
@@ -27,27 +31,17 @@ public class UserController {
     public String userDashBoard() {
         return new String();
     }
+
     
-    @RequestMapping(value = "/profile",method = RequestMethod.GET)
-    public String userProfile(Principal principal) {
-        System.out.println();
-        System.out.println("authenticaiton="+principal);
-        System.out.println();
-        // String username = Helper.getEmailOfLoggedInUser(authentication);
-        // if (authentication == null || !authentication.isAuthenticated()) {
-        //     // Handle the case where authentication is null or not authenticated
-        //     throw new IllegalStateException("User is not authenticated");
-        // }
-        // User user = userService.getUserByEmail(username);
-        // System.out.println();
-        // System.out.println(user.getName());
-        // System.out.println();
-        // return user.getName();
-        return "";
+    @GetMapping("/profile")
+    public String userProfile(@AuthenticationPrincipal Authentication authentication) {
+
+        System.out.println("\n\n\n\n\n\nprofile called");
+        String username = Helper.getEmailOfLoggedInUser(authentication);
+
+        User user = userService.getUserByEmail(username);
+
+        return user.getName();
+
     }
-    
-
-    // user add contact page
-
-    // user view contact
 }

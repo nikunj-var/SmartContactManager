@@ -7,7 +7,7 @@ export const login = async (credentials) => {
       headers: {
         "Content-Type": "application/json",
       },
-      maxRedirects: 0, // Prevent Axios from following redirects
+      // Prevent Axios from following redirects
       validateStatus: function (status) {
         return status >= 200 && status < 400; // Accepts only status codes less than 400
       },

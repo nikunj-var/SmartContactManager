@@ -12,12 +12,14 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
+
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 import com.nimbusds.oauth2.sdk.auth.JWTAuthentication;
@@ -38,6 +40,8 @@ public class SecurityConfig{
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
+
+        System.out.println("\n\n AuthenticationProvider called\n\n");
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -45,12 +49,10 @@ public class SecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,AuthenticationManager authenticationManager) throws Exception{
+        System.out.println("\n\n securityFilterChain called\n\n");
 
-        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/loginuser","/api/do-register","/login**","/api/auth/logout","/oauth2/**").permitAll().anyRequest().authenticated());
-       
 
-        
         httpSecurity.cors(cors->cors.configurationSource(request->{
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:8080"));
@@ -60,6 +62,11 @@ public class SecurityConfig{
             corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
             return corsConfiguration;
         }));
+
+        httpSecurity.csrf(csrf->csrf.disable()).authorizeHttpRequests(authorize->authorize.requestMatchers("/api/auth/loginuser","/api/do-register","/login**","/api/auth/logout","/oauth2/**").permitAll().requestMatchers("/user/profile").hasRole("USER").anyRequest().authenticated());
+        
+        httpSecurity.sessionManagement(session -> session
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(jwtAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
 
         // oauth configuration
         httpSecurity.oauth2Login(oauth2 -> oauth2.loginPage("/login").successHandler(oAuthAuthenticationSuccessHandler)).oauth2ResourceServer(oauth2->oauth2.jwt(jwt -> jwt
@@ -72,17 +79,22 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
+        System.out.println("\n\n passwordEncoder called\n\n");
         return new BCryptPasswordEncoder();
+        
     }
+
      @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        System.out.println("\n\n authenticationManager called\n\n");
         return authenticationConfiguration.getAuthenticationManager();
     }
+
     @Bean
     public JwtDecoder jwtDecoder(){
-        String base64SecretKey = "bmlrdW5qMTIz"; // Base64 encoded key
-        
-        // Decode Base64 key
+       
+        System.out.println("\n\n jwtDecoder called\n\n");
+        String base64SecretKey = "bmlrdW5qMTIg"; 
         byte[] keyBytes = Base64.getDecoder().decode(base64SecretKey);
         SecretKey secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
           
@@ -90,12 +102,22 @@ public class SecurityConfig{
     }
 
     public JwtAuthenticationConverter jwtAuthenticationConverter(){
+        System.out.println("\n\n jwtAuthenticationConverter called\n\n");
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+
+        System.out.println("jwtAuthenticationConverter"+jwtAuthenticationConverter);
         return jwtAuthenticationConverter;
+    }
+
+   
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception{
+        System.out.println("\n\n jwtAuthenticationFilter called\n\n");
+        return new JwtAuthenticationFilter(authenticationManager);
     }
    
 }

@@ -1,9 +1,11 @@
 package com.scm.service.impl;
 
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.security.*;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.security.core.Authentication;
@@ -14,16 +16,17 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class TokenService {
-    private final String jwtSecret = "nikunj123";
-    private final Key key = new SecretKeySpec(jwtSecret.getBytes(), SignatureAlgorithm.HS512.getJcaName());
+    private final String jwtSecret = "bmlrdW5qMTIg";
+     byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+        SecretKey secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");
+   
     public String generateToken(Authentication authentication){
-       
-        System.out.println("token service called");
+   
         String username = authentication.getName();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime()+86400000);
 
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date()).setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, key).compact();
+        return Jwts.builder().setSubject(username).claim("roles", Collections.singletonList("USER")).setIssuedAt(new Date()).setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, secretKey).compact();
 
     }
 }

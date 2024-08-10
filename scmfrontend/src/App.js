@@ -31,8 +31,7 @@ const AppLayout = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.get("isAuthenticated") === "true") {
-      console.log("url caled");
+    if (urlParams.get("isauthenticated") === "true") {
       setIsAuthenticated(true);
     }
   }, [setIsAuthenticated]);
@@ -83,7 +82,8 @@ const appRouter = createBrowserRouter([
 
 const App = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const initialAuthState = urlParams.get("isAuthenticated") === "true";
+  const initialAuthState = urlParams.get("isauthenticated") === "true";
+
   const [isAuthenticated, setIsAuthenticated] = useState(initialAuthState);
   return (
     <>

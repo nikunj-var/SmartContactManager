@@ -26,9 +26,7 @@ const Register = () => {
           },
         })
         .then((res) => {
-          console.log("toast1");
           toast.success(res?.data);
-          console.log("toast2");
         });
     } catch (err) {
       toast.error(err);

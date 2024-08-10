@@ -28,9 +28,11 @@ const Login = () => {
     e?.preventDefault();
     try {
       const response = await login({ username, password });
-      console.log(response);
+
       if (response.status === 200) {
         setIsAuthenticated(true);
+        localStorage.setItem("token", response?.data?.token);
+        console.log("token login=", localStorage.getItem("token"));
         toast.success(response?.data);
         setRedirect(true);
       } else {
@@ -57,11 +59,13 @@ const Login = () => {
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const authSuccess = urlParams.get("token");
+    const authSuccess = urlParams.get("isauthenticated");
     if (authSuccess === "true") {
       setIsAuthenticated(true);
       setRedirect(true);
     }
+    const token = urlParams.get("token");
+    localStorage.setItem("token", token);
   }, []);
 
   if (redirect) {
