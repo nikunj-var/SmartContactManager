@@ -7,17 +7,7 @@ export const login = async (credentials) => {
       headers: {
         "Content-Type": "application/json",
       },
-      // Prevent Axios from following redirects
-      validateStatus: function (status) {
-        return status >= 200 && status < 400; // Accepts only status codes less than 400
-      },
     });
-
-    if (response.status === 302) {
-      const redirectUrl = response.headers["location"];
-      toast.info(`Redirecting to ${redirectUrl}`);
-      // Optionally, handle the redirect in your application
-    }
 
     return response;
   } catch (err) {

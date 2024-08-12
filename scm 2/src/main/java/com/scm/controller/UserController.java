@@ -1,10 +1,15 @@
 package com.scm.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,22 +31,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     @Autowired UserService userService;
-    // user dashboard
-    @RequestMapping(value = "/dashboard", method=RequestMethod.GET)
-    public String userDashBoard() {
-        return new String();
-    }
-
-    
+   
     @GetMapping("/profile")
-    public String userProfile(@AuthenticationPrincipal Authentication authentication) {
+    public ResponseEntity<Map<String, String>> userProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("\n\n\n\n\n\nprofile called");
-        String username = Helper.getEmailOfLoggedInUser(authentication);
+        System.out.println("\n\nProfile endpoint called\n\n");
 
-        User user = userService.getUserByEmail(username);
+    String username = Helper.getEmailOfLoggedInUser(authentication);
+    User user = userService.getUserByEmail(username);
 
-        return user.getName();
-
+    if (user != null) {
+        Map<String, String> response = new HashMap<>();
+        response.put("username", user.getName());
+        response.put("email", user.getEmail());
+        return ResponseEntity.ok(response);
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
     }
 }

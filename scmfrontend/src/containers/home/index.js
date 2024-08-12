@@ -1,11 +1,13 @@
-import React from "react";
+// HomePage.js
+import React, { useEffect } from "react";
 import Profile from "../profile";
-import { useEffect } from "react";
+
 const HomePage = () => {
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    localStorage.setItem("token", token);
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+    }
   }, []);
 
   return (

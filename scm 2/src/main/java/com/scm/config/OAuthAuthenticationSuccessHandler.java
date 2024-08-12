@@ -34,13 +34,12 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
-                logger.info("OAuthAuthenticationSuccessHandler");
-              
+    
                 var oauth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
 
                 String authorizedClientRegistrationId = oauth2AuthenticationToken.getAuthorizedClientRegistrationId();
 
-               var oauthUser = (DefaultOAuth2User)authentication.getPrincipal();
+                var oauthUser = (DefaultOAuth2User)authentication.getPrincipal();
 
                User user1 = new User();
                user1.setUserId(UUID.randomUUID().toString());
