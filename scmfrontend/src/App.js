@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
 import { ToastContainer } from "react-toastify";
+import Sidebar from "./components/sidebar";
 
 export const ThemeContext = createContext();
 export const AuthContext = createContext();
@@ -42,6 +43,7 @@ const AppLayout = () => {
         <div className={`app ${theme}`}>
           <div className="navbar">
             <NavbarLayout />
+            <ProtectedRoute element={<Sidebar />} />
           </div>
           <div className="main-content">
             <Outlet />

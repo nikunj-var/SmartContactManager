@@ -2,6 +2,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import API from "../../constants/api";
+import Sidebar from "../../components/sidebar";
 
 const Profile = () => {
   const [data, setData] = useState(null);
@@ -18,7 +19,9 @@ const Profile = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        setData(response.data);
+
+        localStorage.setItem("name", response?.data?.username);
+        localStorage.setItem("email", response?.data?.email);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -27,12 +30,7 @@ const Profile = () => {
     fetchData();
   }, [token]);
 
-  return (
-    <>
-      hello - {data?.username}
-      <p>email - {data?.email}</p>
-    </>
-  );
+  return <>This is profile page</>;
 };
 
 export default Profile;

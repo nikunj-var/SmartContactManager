@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const NavbarLayout = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const user = localStorage.getItem("name");
   return (
     <div>
       <nav
@@ -40,19 +41,23 @@ const NavbarLayout = () => {
                   Login
                 </Link>
               ) : (
-                <Link
-                  to={"/login"}
-                  type="button"
-                  className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                  onClick={async () => {
-                    const response = await logout();
-                    if (response?.status === 200) {
-                      setIsAuthenticated(false);
-                    }
-                  }}
-                >
-                  Logout
-                </Link>
+                <>
+                  {" "}
+                  <Link
+                    to={"/login"}
+                    type="button"
+                    className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                    onClick={async () => {
+                      const response = await logout();
+                      if (response?.status === 200) {
+                        setIsAuthenticated(false);
+                      }
+                    }}
+                  >
+                    Logout
+                  </Link>
+                  <p>{user}</p>
+                </>
               )}
               {!isAuthenticated && (
                 <Link
@@ -75,10 +80,10 @@ const NavbarLayout = () => {
             </div>
 
             <button
-              data-collapse-toggle="navbar-sticky"
+              data-collapse-toggle="navbar-cta"
               type="button"
               class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="navbar-sticky"
+              aria-controls="navbar-cta"
               aria-expanded="false"
             >
               <span class="sr-only">Open main menu</span>
