@@ -5,7 +5,7 @@ html {
   height: 100%;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -27,13 +27,11 @@ html {
 
 /* App.css */
 .app.light {
-  height: 100%;
   background-color: white;
   color: black;
 }
 
 .app.dark {
-  height: 100%;
   background-color: black;
   color: white;
 }

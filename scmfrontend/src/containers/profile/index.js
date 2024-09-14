@@ -1,8 +1,6 @@
 // Profile.js
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import API from "../../constants/api";
-import Sidebar from "../../components/sidebar";
 
 const Profile = () => {
   const [data, setData] = useState(null);

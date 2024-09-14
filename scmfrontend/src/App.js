@@ -17,6 +17,8 @@ import { useEffect } from "react";
 
 import { ToastContainer } from "react-toastify";
 import Sidebar from "./components/sidebar";
+import Profile from "./containers/profile";
+import AddContact from "./containers/addContact";
 
 export const ThemeContext = createContext();
 export const AuthContext = createContext();
@@ -36,6 +38,8 @@ const AppLayout = () => {
       setIsAuthenticated(true);
     }
   }, [setIsAuthenticated]);
+  const width = isAuthenticated ? "w-[calc(100%-256px)]" : "w-full";
+  const padding = isAuthenticated ? "ml-[256px]" : "ml-2";
 
   return (
     <>
@@ -45,7 +49,7 @@ const AppLayout = () => {
             <NavbarLayout />
             <ProtectedRoute element={<Sidebar />} />
           </div>
-          <div className="main-content">
+          <div className={`main-content ${width} ${padding} mx-auto`}>
             <Outlet />
           </div>
         </div>
@@ -75,6 +79,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/services",
         element: <ProtectedRoute element={<Services />} />,
+      },
+      {
+        path: "/profile",
+        element: <ProtectedRoute element={<Profile />} />,
+      },
+      {
+        path: "/addContact",
+        element: <ProtectedRoute element={<AddContact />} />,
       },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },

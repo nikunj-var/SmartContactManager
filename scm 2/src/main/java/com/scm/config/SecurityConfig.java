@@ -42,7 +42,7 @@ public class SecurityConfig{
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        System.out.println("\nAuthenticationProvider");
+       
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -51,7 +51,7 @@ public class SecurityConfig{
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,AuthenticationManager authenticationManager) throws Exception{
-        System.out.println("\n securityFilterChain");
+        
         httpSecurity.cors(cors->cors.configurationSource(request->{
             CorsConfiguration corsConfiguration = new CorsConfiguration();
             corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3001","http://localhost:8080"));
@@ -78,19 +78,19 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        System.out.println("\n PasswordEncoder");
+      
         return new BCryptPasswordEncoder();
     }
 
      @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        System.out.println("\n AuthenticationManager");
+       
         return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
     public JwtDecoder jwtDecoder(){      
-        System.out.println("\n JwtDecoder");
+      
         String base64SecretKey = "wHZeY2oTGViObTdxbFZyU2NmZ1lxNVlRYXhTc3hHdVA="; 
         byte[] keyBytes = Base64.getDecoder().decode(base64SecretKey);
         SecretKey secretKey = new SecretKeySpec(keyBytes, "HmacSHA256");   
@@ -99,7 +99,6 @@ public class SecurityConfig{
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter(){ 
-        System.out.println("\n JwtAuthenticationConverter");
         JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         grantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
         grantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
@@ -114,7 +113,7 @@ public class SecurityConfig{
     @Bean
     
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception{        
-        System.out.println("\nJwtAuthenticationFilter");
+    
         return new JwtAuthenticationFilter(tokenService);
     }
    

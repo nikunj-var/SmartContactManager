@@ -11,10 +11,8 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div>
-      <div>HomePage</div>
+    <div className="text-center">
       <Profile />
-      <div>HomePage</div>
     </div>
   );
 };

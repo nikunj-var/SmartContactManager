@@ -37,7 +37,6 @@ public class UserController {
     public ResponseEntity<Map<String, String>> userProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        System.out.println("\n\nProfile endpoint called\n\n");
 
     String username = Helper.getEmailOfLoggedInUser(authentication);
     User user = userService.getUserByEmail(username);

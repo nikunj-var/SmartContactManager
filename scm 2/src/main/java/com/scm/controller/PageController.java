@@ -29,7 +29,7 @@ public class PageController {
 
    @PostMapping("/do-register")
      public ResponseEntity<?> processRegsister(@Valid @RequestBody UserForm userForm,BindingResult bindingResult){
-      System.out.println("\nregistercalled\n");
+    
       if(bindingResult.hasErrors()){
          return ResponseEntity.badRequest().body("Validation errors");
       }

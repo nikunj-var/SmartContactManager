@@ -59,7 +59,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .setSigningKey(secretKey)
                         .parseClaimsJws(token.substring(BEARER_PREFIX.length()))
                         .getBody();
-                System.out.println("\nclaims="+claims);
+            
                 String username = claims.getSubject();
                 List<SimpleGrantedAuthority> authorities = ((List<String>) claims.get("roles")).stream()
                         .map(role -> new SimpleGrantedAuthority(ROLE_PREFIX + role))
@@ -69,8 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     Authentication auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(auth);
                    
-                   
-                    System.out.println("Authorities: " + auth.getAuthorities());
                 }
             } catch (Exception e) {
                 logger.error("JWT validation failed: {}", e.getMessage());
