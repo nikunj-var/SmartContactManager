@@ -1,5 +1,7 @@
 package com.scm.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import com.scm.entities.User;
 import com.scm.forms.ContactForm;
 import com.scm.helpers.Helper;
 import com.scm.service.ContactService;
+import com.scm.service.ImageService;
 import com.scm.service.UserService;
 
 import jakarta.validation.Valid;
@@ -30,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ContactController {
 
     @Autowired private ContactService contactService;
-    
+    @Autowired private ImageService imageService;
     @Autowired private UserService userService;
 
     @PostMapping("/save-contact")
@@ -41,13 +44,10 @@ public class ContactController {
         }
         try{
             String username = Helper.getEmailOfLoggedInUser(authentication);
+            String fileName = UUID.randomUUID().toString();
 
-            // String fileURL = imageService.uploadImage(picture);
+            String fileURL = imageService.uploadImage(picture,fileName);
 
-            if (picture != null && !picture.isEmpty()) {
-                String filename = picture.getOriginalFilename();
-                System.out.println(filename);
-            }
             User user= userService.getUserByEmail(username);
             Contact contact = new Contact();
             contact.setName(contactForm.getName());
@@ -59,11 +59,13 @@ public class ContactController {
             contact.setUser(user);
             contact.setLinkedInLink(contactForm.getLinkedIn());
             contact.setWebsiteLink(contactForm.getWebsiteLink());
-            // contact.setPicture(picture);
+            contact.setPicture(fileURL);
+            contact.setCloudinaryImagePublicId(fileName);
             contactService.save(contact);
             return ResponseEntity.ok("Contact Added");
         }
         catch(Exception e){
+            System.out.println("\n\n\n\n\nerror"+e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Contact Not Added");
         }
         
