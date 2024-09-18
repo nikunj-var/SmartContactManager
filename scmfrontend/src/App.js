@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import Sidebar from "./components/sidebar";
 import Profile from "./containers/profile";
 import AddContact from "./containers/addContact";
+import ContactList from "./containers/contactList";
 
 export const ThemeContext = createContext();
 export const AuthContext = createContext();
@@ -87,6 +88,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/addContact",
         element: <ProtectedRoute element={<AddContact />} />,
+      },
+      {
+        path: "/contactList",
+        element: <ProtectedRoute element={<ContactList />} />,
       },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },

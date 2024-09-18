@@ -2,6 +2,8 @@ package com.scm.forms;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.scm.validators.ValidFile;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -30,7 +32,7 @@ public class ContactForm {
     private String linkedIn;
     private String websiteLink;
 
-    // private MultipartFile picture;
+    // @ValidFile
+    // private MultipartFile contactImage;
 
-    
 }

@@ -1,5 +1,7 @@
 package com.scm.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 @RestController
@@ -70,6 +74,24 @@ public class ContactController {
         }
         
        
+    }
+    
+
+    @GetMapping("/getAll")
+    public ResponseEntity<ArrayList<Contact>> getAllContacts(Authentication authentication) {
+        System.out.println("\n\ngetadll called\n\n");
+        String username = Helper.getEmailOfLoggedInUser(authentication);
+        User user = userService.getUserByEmail(username);
+        List<Contact> contacts = contactService.getByUser(user);
+
+        ArrayList<Contact> contactArrayList = new ArrayList<>(contacts);
+        // Check if the contact list is empty and return appropriate status
+        if (contacts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        // Returning the contact list wrapped in a ResponseEntity with HTTP 200 status
+        return new ResponseEntity<>(contactArrayList, HttpStatus.OK);
     }
     
 }
