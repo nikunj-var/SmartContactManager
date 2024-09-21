@@ -24,6 +24,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Getter
 @Setter
@@ -59,6 +61,7 @@ public class User implements UserDetails{
     private List<String> roleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    @JsonBackReference
     private List<Contact>contacts = new ArrayList<>();
 
     @Override

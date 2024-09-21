@@ -6,7 +6,7 @@ const AddContact = () => {
   const [newUser, setNewUser] = useState({
     name: "",
     email: "",
-    phoneNumber: "",
+    phoneNo: "",
     description: "",
     address: "",
     file: "",
@@ -17,7 +17,7 @@ const AddContact = () => {
   const {
     name,
     email,
-    phoneNumber,
+    phoneNo,
     file,
     description,
     address,
@@ -53,7 +53,7 @@ const AddContact = () => {
       });
 
       if (newUser.file) {
-        formData.append("file", newUser.file); 
+        formData.append("file", newUser.file);
       }
 
       const response = await axios
@@ -169,8 +169,8 @@ const AddContact = () => {
                   </svg>
                 </div>
                 <input
-                  name="phoneNumber"
-                  value={phoneNumber}
+                  name="phoneNo"
+                  value={phoneNo}
                   type="number"
                   id="input-group-1"
                   onChange={(e) => onInputChange(e)}

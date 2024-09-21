@@ -107,7 +107,7 @@ const NavbarLayout = () => {
             class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
             id="navbar-sticky"
           >
-            <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-transparent md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:border-gray-700">
+            {/* <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-transparent md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:border-gray-700">
               <li>
                 <Link
                   to={"/"}
@@ -134,7 +134,7 @@ const NavbarLayout = () => {
                   Services
                 </Link>
               </li>
-            </ul>
+            </ul> */}
           </div>
         </div>
       </nav>

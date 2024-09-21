@@ -2,6 +2,8 @@ package com.scm.entities;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -39,8 +41,15 @@ public class Contact {
     private String cloudinaryImagePublicId;
 
    @ManyToOne
+   @JsonManagedReference
     private User user;
 
      @OneToMany(mappedBy = "contact",cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     private List<SocialLink>links = new ArrayList<>();
+
+    @Override
+public String toString() {
+    return "Contact{id=" + id + ", name='" + name + "', email='" + email + "'}";
+}
+
 }

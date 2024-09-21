@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -78,20 +79,30 @@ public class ContactController {
     
 
     @GetMapping("/getAll")
-    public ResponseEntity<ArrayList<Contact>> getAllContacts(Authentication authentication) {
-        System.out.println("\n\ngetadll called\n\n");
+    public ResponseEntity<?> getAllContacts(Authentication authentication,@RequestParam(value = "page",defaultValue = "0") int page,@RequestParam(value =  "size",defaultValue = "10") int size,@RequestParam(value = "sortBy",defaultValue = "name") String sortBy, @RequestParam(value = "direction",defaultValue = "asc") String direction) {
+       
         String username = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(username);
-        List<Contact> contacts = contactService.getByUser(user);
+       
+        Page<Contact> contacts =  contactService.getByUser(user,page,size,sortBy,direction);
 
-        ArrayList<Contact> contactArrayList = new ArrayList<>(contacts);
-        // Check if the contact list is empty and return appropriate status
         if (contacts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        // Returning the contact list wrapped in a ResponseEntity with HTTP 200 status
-        return new ResponseEntity<>(contactArrayList, HttpStatus.OK);
+      
+        return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchContact(@RequestParam("q") String query,@RequestParam(value = "page",defaultValue = "0") int page,@RequestParam(value =  "size",defaultValue = "10") int size,@RequestParam(value = "sortBy",defaultValue = "name") String sortBy, @RequestParam(value = "direction",defaultValue = "asc") String direction) {
+
+    Page<Contact> contacts = contactService.searchByName(query, size, page, sortBy, direction);
+    
+    if (contacts.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+  
+    return new ResponseEntity<>(contacts, HttpStatus.OK);
+}
     
 }
