@@ -49,6 +49,7 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public void delete(String id) {
        var contact = contactRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Contact not found with given id "+id));
+       System.out.println("\n\ncontact"+contact);
        contactRepo.delete(contact);
     }
 

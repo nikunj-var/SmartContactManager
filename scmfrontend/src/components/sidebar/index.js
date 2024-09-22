@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./index.css";
+import { FiLogOut } from "react-icons/fi";
+import { SiWelcometothejungle } from "react-icons/si";
+
 import { Link } from "react-router-dom";
+import { logout } from "../../services/AuthService";
+import { AuthContext } from "../../App";
 const Sidebar = () => {
+  const name = localStorage.getItem("name");
+  const image =
+    "https://cdn1.iconfinder.com/data/icons/app-user-interface-glyph/64/user_man_user_interface_app_person-512.png";
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+
   return (
     <div>
       <aside
@@ -10,13 +20,17 @@ const Sidebar = () => {
         aria-label="Sidebar"
       >
         <div class="h-full px-3 pt-16 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <a href="https://flowbite.com/" class="flex items-center ps-2.5 mb-5">
-            <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Welcome to Link Minder
+          <div class="flex flex-col justify-center items-center ps-2.5 mb-5">
+            <img class="w-20 h-20 rounded-full mx-auto" src={image} />
+            <span class=" flex self-center text-center text-2xl font-serif font-semibold whitespace-nowrap text-gray-700 dark:text-white">
+              <SiWelcometothejungle /> elcome
             </span>
-          </a>
+            <span class=" flex self-center text-center text-2xl font-serif font-semibold whitespace-nowrap text-gray-700 dark:text-white">
+              {name}
+            </span>
+          </div>
           <ul class="space-y-2 font-medium">
-            <li>
+            {/* <li>
               <a
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -33,7 +47,7 @@ const Sidebar = () => {
                 </svg>
                 <span class="ms-3">Dashboard</span>
               </a>
-            </li>
+            </li> */}
             <li>
               <Link
                 to={"/profile"}
@@ -86,6 +100,24 @@ const Sidebar = () => {
               </Link>
             </li>
             <li>
+              {" "}
+              <Link
+                to={"/login"}
+                class="flex gap-4 items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                // className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                onClick={async () => {
+                  const response = await logout();
+                  if (response?.status === 200) {
+                    setIsAuthenticated(false);
+                  }
+                }}
+              >
+                <FiLogOut />
+                Logout
+              </Link>
+            </li>
+
+            {/* <li>
               <a
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -101,8 +133,8 @@ const Sidebar = () => {
                 </svg>
                 <span class="flex-1 ms-3 whitespace-nowrap">Products</span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
                 href="#"
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -143,7 +175,7 @@ const Sidebar = () => {
                 </svg>
                 <span class="flex-1 ms-3 whitespace-nowrap">Sign Up</span>
               </a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </aside>

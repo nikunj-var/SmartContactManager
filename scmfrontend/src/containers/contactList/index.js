@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import debounce from "lodash/debounce";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { MdDeleteOutline } from "react-icons/md";
+import UserModal from "./userModal";
 
 const ContactList = () => {
   const [data, setData] = useState([]);
   const token = localStorage.getItem("token");
 
   const [size, setSize] = useState(3);
+  const [id, setId] = useState({});
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (isSearching) return;
@@ -81,6 +85,23 @@ const ContactList = () => {
     }
   }, 300);
 
+  const handleDelete = async (userId) => {
+    setShowModal(false);
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/contact/delete?id=${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast.success("Contact Deleted Successfully!");
+    } catch (err) {
+      toast.error("Error while deleting contact.");
+    }
+  };
+
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchTerm(searchValue);
@@ -88,11 +109,24 @@ const ContactList = () => {
     debouncedSearch(searchValue);
   };
 
+  const handleModal = ({ userData }) => {
+    console.log("userdata", userData);
+    setId(userData);
+    setShowModal((prev) => !prev);
+  };
+
   const image =
     "https://cdn1.iconfinder.com/data/icons/app-user-interface-glyph/64/user_man_user_interface_app_person-512.png";
 
   return (
     <div>
+      {showModal && (
+        <UserModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          data={id}
+        />
+      )}
       <p className="text-center p-2 text-2xl underline ">All Contacts List</p>
       <div className="relative overflow-x-auto border shadow-md sm:rounded-lg m-5">
         <div className="flex items-center justify-end flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900 p-2">
@@ -138,15 +172,16 @@ const ContactList = () => {
               <th scope="col" className="px-6 py-3">
                 Address
               </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              <th scope="col" className="px-6 py-3"></th>
             </tr>
           </thead>
 
           <tbody>
             {data?.map((userData) => (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <tr
+                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                onClick={() => handleModal({ userData })}
+              >
                 <th
                   scope="row"
                   className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -171,13 +206,11 @@ const ContactList = () => {
                     {userData?.address ?? "N/A"}
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit user
-                  </a>
+                <td
+                  className="px-6 py-4"
+                  onClick={() => handleDelete(userData?.id)}
+                >
+                  <MdDeleteOutline class="text-red-600" />
                 </td>
               </tr>
             ))}
@@ -186,7 +219,7 @@ const ContactList = () => {
               {!data && (
                 <p class="flex justify-center text-2xl w-full text-center mx-auto p-5">
                   {" "}
-                  ☹️ No Data Found!
+                  ☹️ No Contacts Found!
                 </p>
               )}
             </tr>

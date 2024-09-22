@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,6 +104,20 @@ public class ContactController {
     }
   
     return new ResponseEntity<>(contacts, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteContact(@RequestParam(value = "id") String id) {
+    try {
+
+        System.out.println("\n\ndelete called"+id);
+        contactService.delete(id); // Ensure that the delete method works correctly
+        return ResponseEntity.ok("Contact deleted successfully");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Error deleting contact: " + e.getMessage());
+    }
 }
+    
     
 }
